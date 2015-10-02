@@ -6,6 +6,7 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.*;
+import java.awt.*;
 
 
 
@@ -17,10 +18,10 @@ public class MainFrame implements ActionListener{
 	
 	JFrame main_container;	
 	JButton plus, add, create, clone, clone_repo, create_repo, add_file, browse;
-	JInternalFrame plus_frame;
-	JTextField add_location, create_location;
-	JLabel path, name;
-	
+	JInternalFrame plus_frame, repository_list_frame, file_list_frame;
+	JTextField add_location, create_location, filter_repository;
+	JLabel path, name, triangle;
+	Graphics g;
 	
 	int plus_counter=1;
 	
@@ -39,17 +40,63 @@ public class MainFrame implements ActionListener{
 		
 		plus_frame.setBounds(40,60,100,100);
 		plus_frame.setLayout(null);
+        plus_frame.setBackground(Color.white);
+
+
+
+        repository_list_frame = new JInternalFrame();
+        repository_list_frame.setBounds(0, 75, 300, 675);
+        repository_list_frame.setLayout(null);
+        repository_list_frame.setVisible(true);
+        repository_list_frame.setBackground(Color.white);
+
+        file_list_frame = new JInternalFrame();
+        file_list_frame.setBounds(301,75,300,675);
+        file_list_frame.setLayout(null);
+        file_list_frame.setVisible(true);
+        file_list_frame.setBackground(Color.white);
+
+
+
 		
 		
 		// North pane of plus null
 		BasicInternalFrameUI bi = (BasicInternalFrameUI)plus_frame.getUI();
         bi.setNorthPane(null);
-		
-		
-		main_container = new JFrame();
-		
+
+        bi = (BasicInternalFrameUI)repository_list_frame.getUI();
+        bi.setNorthPane(null);
+
+        bi = (BasicInternalFrameUI)file_list_frame.getUI();
+        bi.setNorthPane(null);
+
+
+
+        // Image Display
+
+        ImageIcon trngle = new ImageIcon("/home/iamutkarsh/workspace/Minor/src/icons/triangle.png");
+
+        Image img1 = trngle.getImage() ;
+        Image newimg1 = img1.getScaledInstance(15,15,  java.awt.Image.SCALE_SMOOTH ) ;
+        ImageIcon image = new ImageIcon( newimg1 );
+
+        JLabel triangle = new JLabel(image);
+        triangle.setBounds(53, 35, 15, 15);
+        triangle.setVisible(true);
+
+
+
+
+
+
+
+
+
+        main_container = new JFrame();
 		main_container.setSize(1366,768);
 		main_container.setLayout(null);
+        main_container.getContentPane().setBackground(Color.WHITE);
+		main_container.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
 		
@@ -71,7 +118,7 @@ public class MainFrame implements ActionListener{
 		add.setVisible(false);
 		
 		// add image
-		Image img = add_file_image.getImage() ;  
+		Image img = add_file_image.getImage() ;
 		Image newimg = img.getScaledInstance(60,50,  java.awt.Image.SCALE_SMOOTH ) ;  
 		ImageIcon icon = new ImageIcon( newimg );
 		
@@ -96,8 +143,7 @@ public class MainFrame implements ActionListener{
 		
 	
 		
-	
-		
+
 		
 		
 		
@@ -169,7 +215,22 @@ public class MainFrame implements ActionListener{
 		name.setVisible(false);
 		
 	
-		
+		// Text Fields
+
+        filter_repository = new JTextField("Filter Repository");
+
+        filter_repository.setBounds(5, 80, 290, 30);
+        filter_repository.setVisible(true);
+        // filter label vanish
+        filter_repository.addMouseListener(new MouseAdapter() {
+
+            public void mouseClicked(MouseEvent e) {
+                filter_repository.setText("");
+            }
+        });
+
+
+
 		
 		
 		
@@ -215,13 +276,17 @@ public class MainFrame implements ActionListener{
 	
 
 		main_container.add(plus);
-		
-		
-		
-		
+
 		main_container.add(plus_frame);
-		 
-		main_container.setVisible(true);
+        main_container.add(filter_repository);
+        main_container.add(repository_list_frame);
+        main_container.add(file_list_frame);
+        main_container.add(triangle);
+
+
+
+        main_container.setVisible(true);
+
 	}
 		
 		
@@ -258,6 +323,8 @@ public class MainFrame implements ActionListener{
 			}
 				
 		path.setVisible(true);
+        browse.setVisible(true);
+
 		
 		
 		
@@ -276,6 +343,7 @@ public class MainFrame implements ActionListener{
 			path.setVisible(true);
 
 			name.setVisible(false);
+			add_location.setVisible(true);
             create_location.setVisible(false);
             browse.setVisible(true);
 
