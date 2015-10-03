@@ -18,11 +18,13 @@ public class MainFrame implements ActionListener{
 	
 	JFrame main_container;	
 	JButton plus, add, create, clone, clone_repo, create_repo, add_file, browse;
-	JInternalFrame plus_frame, repository_list_frame, file_list_frame;
+	JInternalFrame plus_frame, repository_list_frame, file_list_frame, top_toolbar, text_area_frame;
 	JTextField add_location, create_location, filter_repository;
-	JLabel path, name, triangle;
+	JLabel path, name, triangle, create_repository_image;
 	Graphics g;
-	
+    JTextArea text_area;
+
+
 	int plus_counter=1;
 	
 	int plus_button_width=85;
@@ -41,6 +43,21 @@ public class MainFrame implements ActionListener{
 		plus_frame.setBounds(40,60,100,100);
 		plus_frame.setLayout(null);
         plus_frame.setBackground(Color.white);
+        //plus_frame.setEnabled(false);
+
+
+        plus_frame.addMouseListener(new MouseAdapter() {
+
+            //public void mouseClicked(MouseEvent e) {
+               // filter_repository.setText("");
+            //}
+
+            public void mouseExited(MouseEvent e) {
+                plus_frame.setVisible(false);
+				plus_counter++;
+            }
+        });
+
 
 
 
@@ -49,12 +66,40 @@ public class MainFrame implements ActionListener{
         repository_list_frame.setLayout(null);
         repository_list_frame.setVisible(true);
         repository_list_frame.setBackground(Color.white);
+        repository_list_frame.setEnabled(false);
+
 
         file_list_frame = new JInternalFrame();
-        file_list_frame.setBounds(301,75,300,675);
+        file_list_frame.setBounds(301,75,400,675);
         file_list_frame.setLayout(null);
         file_list_frame.setVisible(true);
         file_list_frame.setBackground(Color.white);
+        file_list_frame.setEnabled(false);
+
+
+        top_toolbar = new JInternalFrame();
+        top_toolbar.setBounds(301,5,1010,68);
+        top_toolbar.setLayout(null);
+        top_toolbar.setVisible(true);
+        top_toolbar.setBackground(Color.white);
+        top_toolbar.setEnabled(false);
+
+        text_area_frame = new JInternalFrame();
+        text_area_frame.setBounds(702,75,666,675);
+        //text_area_frame.setLayout(null);
+        text_area_frame.setVisible(true);
+        text_area_frame.setBackground(Color.white);
+        //text_area_frame.setEnabled(true);
+
+
+
+        text_area = new JTextArea(666,675);
+        text_area.setBounds(702,75,666,675);
+        //text_area.setLayout(null);
+        text_area.setVisible(true);
+        text_area.setBackground(Color.white);
+        //text_area.setEnabled(true);
+        text_area.setEditable(true);
 
 
 
@@ -70,21 +115,43 @@ public class MainFrame implements ActionListener{
         bi = (BasicInternalFrameUI)file_list_frame.getUI();
         bi.setNorthPane(null);
 
+        bi = (BasicInternalFrameUI)top_toolbar.getUI();
+        bi.setNorthPane(null);
+
+        bi = (BasicInternalFrameUI)text_area_frame.getUI();
+        bi.setNorthPane(null);
+
+
 
 
         // Image Display
 
+        //Triangle Display
         ImageIcon trngle = new ImageIcon("/home/iamutkarsh/workspace/Minor/src/icons/triangle.png");
 
         Image img1 = trngle.getImage() ;
         Image newimg1 = img1.getScaledInstance(15,15,  java.awt.Image.SCALE_SMOOTH ) ;
-        ImageIcon image = new ImageIcon( newimg1 );
+        trngle = new ImageIcon( newimg1 );
 
-        JLabel triangle = new JLabel(image);
+        triangle = new JLabel(trngle);
         triangle.setBounds(53, 35, 15, 15);
         triangle.setVisible(true);
 
 
+        /*
+        // Create repo Image
+
+        ImageIcon trngle = new ImageIcon("/home/iamutkarsh/workspace/Minor/src/icons/create_repository.png");
+
+        Image img1 = trngle.getImage() ;
+        Image newimg1 = img1.getScaledInstance(200, 100, java.awt.Image.SCALE_SMOOTH ) ;
+        ImageIcon image = new ImageIcon( newimg1 );
+
+        create_repository_image = new JLabel(image);
+        create_repository_image.setBounds(702, 300, 200, 100);
+        create_repository_image.setVisible(true);
+
+        */
 
 
 
@@ -219,20 +286,27 @@ public class MainFrame implements ActionListener{
 
         filter_repository = new JTextField("Filter Repository");
 
-        filter_repository.setBounds(5, 80, 290, 30);
+
+        filter_repository.setBounds(0, 0, 290, 36);
         filter_repository.setVisible(true);
+        //filter_repository.setAlwaysOnTop(true);
+        //filter_repository.
         // filter label vanish
         filter_repository.addMouseListener(new MouseAdapter() {
 
             public void mouseClicked(MouseEvent e) {
                 filter_repository.setText("");
             }
+
+            public void mouseExited(MouseEvent e) {
+                filter_repository.setText("Filter Repository");
+            }
         });
 
 
 
 		
-		
+
 		
 		
 		// Adding buttons to plus frame
@@ -272,24 +346,28 @@ public class MainFrame implements ActionListener{
 		
 		
 		// On plus button click 
-		
-	
+
+        text_area_frame.add(text_area);
+	    repository_list_frame.add(filter_repository);
 
 		main_container.add(plus);
 
 		main_container.add(plus_frame);
-        main_container.add(filter_repository);
+        //main_container.add(filter_repository);
         main_container.add(repository_list_frame);
         main_container.add(file_list_frame);
+        main_container.add(top_toolbar);
         main_container.add(triangle);
-
+        main_container.add(text_area_frame);
 
 
         main_container.setVisible(true);
 
 	}
 		
-		
+
+
+
 
 	
 
@@ -324,6 +402,8 @@ public class MainFrame implements ActionListener{
 				
 		path.setVisible(true);
         browse.setVisible(true);
+        add_location.setVisible(true);
+
 
 		
 		
@@ -387,7 +467,19 @@ public class MainFrame implements ActionListener{
 		
 		
 		}
-	
+
+    public void fileLoader ()
+    {
+
+
+        //JFileChooser
+
+
+    }
+
+
+
+
 	
 	public static void main (String args[]) {
 		
