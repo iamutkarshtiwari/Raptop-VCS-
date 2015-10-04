@@ -14,17 +14,17 @@ import java.io.File;
 public class MainFrame implements ActionListener{
 
 
-
+    public static boolean plus_on=false;
 	public JFrame main_container;
     public JButton plus, add, create, clone, clone_repo, create_repo, add_file, browse;
     public static JInternalFrame plus_frame, repository_list_frame, file_list_frame, top_toolbar, text_area_frame;
-    public JTextField add_location, create_location, filter_repository;
+    public static JTextField add_location1, add_location2, create_location, filter_repository;
     public JLabel path, name, triangle, create_repository_image;
     public Graphics g;
     public JTextArea text_area;
 
 
-    public int plus_counter=1;
+    public int plus_counter=2;
 
     public int plus_button_width=85;
     public int plus_button_height=30;
@@ -34,22 +34,14 @@ public class MainFrame implements ActionListener{
 	
 	
 	MainFrame() {
-	
-		
-	
-		plus_frame = new JInternalFrame();
-		
-		plus_frame.setBounds(40,60,100,100);
-		plus_frame.setLayout(null);
+
+
+        plus_frame = new JInternalFrame();
+
+        plus_frame.setBounds(40, 60, 100, 100);
+        plus_frame.setLayout(null);
         plus_frame.setBackground(Color.white);
         //plus_frame.setEnabled(false);
-
-
-
-
-
-
-
 
 
         repository_list_frame = new JInternalFrame();
@@ -61,7 +53,7 @@ public class MainFrame implements ActionListener{
 
 
         file_list_frame = new JInternalFrame();
-        file_list_frame.setBounds(301,75,400,675);
+        file_list_frame.setBounds(301, 75, 400, 675);
         file_list_frame.setLayout(null);
         file_list_frame.setVisible(true);
         file_list_frame.setBackground(Color.white);
@@ -69,23 +61,22 @@ public class MainFrame implements ActionListener{
 
 
         top_toolbar = new JInternalFrame();
-        top_toolbar.setBounds(301,5,1010,68);
+        top_toolbar.setBounds(301, 5, 1010, 68);
         top_toolbar.setLayout(null);
         top_toolbar.setVisible(true);
         top_toolbar.setBackground(Color.white);
         top_toolbar.setEnabled(false);
 
         text_area_frame = new JInternalFrame();
-        text_area_frame.setBounds(702,75,666,675);
+        text_area_frame.setBounds(702, 75, 666, 675);
         //text_area_frame.setLayout(null);
         text_area_frame.setVisible(true);
         text_area_frame.setBackground(Color.white);
         //text_area_frame.setEnabled(true);
 
 
-
-        text_area = new JTextArea(666,675);
-        text_area.setBounds(702,75,666,675);
+        text_area = new JTextArea(666, 675);
+        text_area.setBounds(702, 75, 666, 675);
         //text_area.setLayout(null);
         text_area.setVisible(false);
         text_area.setBackground(Color.white);
@@ -93,60 +84,93 @@ public class MainFrame implements ActionListener{
         text_area.setEditable(true);
 
 
-
-		
-		
-		// North pane of plus null
-		BasicInternalFrameUI bi = (BasicInternalFrameUI)plus_frame.getUI();
+        // North pane of plus null
+        BasicInternalFrameUI bi = (BasicInternalFrameUI) plus_frame.getUI();
         bi.setNorthPane(null);
 
-        bi = (BasicInternalFrameUI)repository_list_frame.getUI();
+        bi = (BasicInternalFrameUI) repository_list_frame.getUI();
         bi.setNorthPane(null);
 
-        bi = (BasicInternalFrameUI)file_list_frame.getUI();
+        bi = (BasicInternalFrameUI) file_list_frame.getUI();
         bi.setNorthPane(null);
 
-        bi = (BasicInternalFrameUI)top_toolbar.getUI();
+        bi = (BasicInternalFrameUI) top_toolbar.getUI();
         bi.setNorthPane(null);
 
-        bi = (BasicInternalFrameUI)text_area_frame.getUI();
+        bi = (BasicInternalFrameUI) text_area_frame.getUI();
         bi.setNorthPane(null);
 
 
-		// Plus frame vanish
+        // Plus frame vanish
 
-		top_toolbar.addMouseListener(new MouseAdapter() {
-
-
-
-			public void mouseEntered(MouseEvent e) {
-				plus_frame.setVisible(false);
-				plus_counter++;
-
-			}
-		});
+        // *********************************************************
 
 
-		file_list_frame.addMouseListener(new MouseAdapter() {
+        top_toolbar.addMouseListener(new MouseAdapter() {
+
+
+            public void mouseEntered(MouseEvent e) {
+
+                if (plus_on == false) {
+
+                    plus_frame.setVisible(false);
+                    plus_counter++;
+
+                }
+
+            }
+        });
 
 
 
-			public void mouseEntered(MouseEvent e) {
-				plus_frame.setVisible(false);
-				plus_counter++;
-
-			}
-		});
+        file_list_frame.addMouseListener(new MouseAdapter() {
 
 
-		repository_list_frame.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
 
-			public void mouseEntered(MouseEvent e) {
-				plus_frame.setVisible(false);
-				plus_counter++;
+                if (plus_on == false) {
 
-			}
-		});
+                    plus_frame.setVisible(false);
+                    plus_counter++;
+                }
+
+            }
+        });
+
+
+        repository_list_frame.addMouseListener(new MouseAdapter() {
+
+            public void mouseEntered(MouseEvent e) {
+
+                if (plus_on == false) {
+
+                    plus_frame.setVisible(false);
+                    plus_counter++;
+                }
+
+            }
+        });
+
+
+
+
+        plus_frame.addMouseListener(new MouseAdapter() {
+
+            public void mouseEntered(MouseEvent e) {
+
+                plus_on = false;
+                //System.out.println("help");
+            }
+
+
+        });
+
+        // **************************************************************************
+
+
+
+
+
 
 
 
@@ -225,11 +249,18 @@ public class MainFrame implements ActionListener{
 		
 		// add text location
 		
+		// location 1
+		add_location1= new JTextField();
 		
-		add_location= new JTextField();
-		
-		add_location.setBounds(100,150,300,30);
-		add_location.setVisible(true);
+		add_location1.setBounds(100,150,300,30);
+		add_location1.setVisible(true);
+
+        // location 2
+        add_location2= new JTextField();
+
+        add_location2.setBounds(100,150,300,30);
+        add_location2.setVisible(true);
+
 
 
         create_location = new JTextField();
@@ -292,6 +323,23 @@ public class MainFrame implements ActionListener{
         browse.setBounds(405,150,40,30);
         browse.setVisible(false);
 
+        //browse mouse listener
+
+        browse.addMouseListener(new MouseAdapter() {
+
+
+
+             public void mouseClicked(MouseEvent e) {
+
+                 plus_on = true;
+                 FileLoader.file_chooser();
+
+             }
+        });
+
+
+
+
 
 
 
@@ -307,7 +355,7 @@ public class MainFrame implements ActionListener{
 		
 		
 		name = new JLabel("Name");
-		name.setBounds(50,100,40,30);
+		name.setBounds(50, 100, 40, 30);
 		name.setVisible(false);
 		
 	
@@ -348,7 +396,8 @@ public class MainFrame implements ActionListener{
 		plus_frame.add(clone_repo);
 		plus_frame.add(create_repo);
 		
-		plus_frame.add(add_location);
+		plus_frame.add(add_location1);
+        plus_frame.add(add_location2);
         plus_frame.add(create_location);
 
         plus_frame.add(browse);
@@ -402,110 +451,98 @@ public class MainFrame implements ActionListener{
 	
 
 	public void actionPerformed(ActionEvent e) {
-		
-		// Event Listener for plus
-		
-		if(e.getSource()==plus) {	
-			
-			plus_counter++;	
-		
-			plus_frame.setSize(500,300);
-			
-			
-			
-		
-			// Hide/Unhide
-			if(plus_counter%2==0) {
-			
-				plus_frame.setVisible(true);
-				add.setVisible(true);
-				create.setVisible(true);
-				clone.setVisible(true);
-			}
-			
-			else {
-				plus_frame.setVisible(false);
-				add.setVisible(false);
-				create.setVisible(false);
-				clone.setVisible(false);
-			}
-				
-		path.setVisible(true);
-        browse.setVisible(true);
-        add_location.setVisible(true);
+
+        // Event Listener for plus
+
+        if (e.getSource() == plus) {
+
+            plus_counter++;
+
+            plus_frame.setSize(500, 300);
 
 
-		
-		
-		
-			
-		}
-		
-		// Add Pressed
-		
-		if(e.getSource()==add) {
-			
-			add_file.setVisible(true);	
-			create_repo.setVisible(false);
-			//clone_repo.setVisible(false);
-			plus_frame.setSize(500,300);
-			
-			path.setVisible(true);
+            // Hide/Unhide
+            if (plus_counter % 2 == 0) {
 
-			name.setVisible(false);
-			add_location.setVisible(true);
+                plus_frame.setVisible(true);
+                add.setVisible(true);
+                create.setVisible(true);
+                clone.setVisible(true);
+            } else {
+                plus_frame.setVisible(false);
+                add.setVisible(false);
+                create.setVisible(false);
+                clone.setVisible(false);
+            }
+
+            path.setVisible(true);
+            browse.setVisible(true);
+            add_location1.setVisible(true);
+
+
+        }
+
+        // Add Pressed
+
+        if (e.getSource() == add) {
+
+            add_file.setVisible(true);
+            create_repo.setVisible(false);
+            //clone_repo.setVisible(false);
+            plus_frame.setSize(500, 300);
+
+            path.setVisible(true);
+
+            name.setVisible(false);
+            add_location1.setVisible(true);
+            add_location2.setVisible(false);
             create_location.setVisible(false);
             browse.setVisible(true);
 
-			
-		}
-		
-		// Create Pressed
-		
-		if(e.getSource()==create) {
-			
-			add_file.setVisible(false);	
-			create_repo.setVisible(true);
-			//clone_repo.setVisible(false);	
-			plus_frame.setSize(500,300);
-			name.setVisible(true);
+
+        }
+
+        // Create Pressed
+
+        if (e.getSource() == create) {
+
+            add_file.setVisible(false);
+            create_repo.setVisible(true);
+            //clone_repo.setVisible(false);
+            plus_frame.setSize(500, 300);
+            name.setVisible(true);
             path.setVisible(true);
-            add_location.setVisible(true);
+            add_location1.setVisible(false);
+            add_location2.setVisible(true);
             create_location.setVisible(true);
             browse.setVisible(true);
-			
-			
-		}
-		
-		// Clone Pressed
-		if(e.getSource()==clone) {
-			
-			add_file.setVisible(false);	
-			create_repo.setVisible(false);
-			//clone_repo.setVisible(true);
-			plus_frame.setSize(500,600);
-			path.setVisible(false);
-			name.setVisible(false);
-			add_location.setVisible(false);
+
+
+        }
+
+        // Clone Pressed
+        if (e.getSource() == clone) {
+
+            add_file.setVisible(false);
+            create_repo.setVisible(false);
+            //clone_repo.setVisible(true);
+            plus_frame.setSize(500, 600);
+            path.setVisible(false);
+            name.setVisible(false);
+            add_location1.setVisible(false);
+            add_location2.setVisible(false);
             create_location.setVisible(false);
             browse.setVisible(false);
-			
-			
-		}
-		
-		
-		
-		
-		}
-
-    public void fileLoader ()
-    {
 
 
-        //JFileChooser
+        }
 
 
     }
+
+
+
+
 
 
 

@@ -1,22 +1,25 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * Created by iamutkarsh on 4/10/15.
  */
-public class FileLoader extends MainFrame {
+public class FileLoader extends MainFrame implements ActionListener {
 
 
     public static JLabel settings, branch, sync, sync_label, merge;
+    public static JFileChooser chooser;
 
-    public static void image_load()   {
+    public static void image_load() {
 
         // Settings Icon
         ImageIcon trngle = new ImageIcon("/home/iamutkarsh/workspace/Minor/src/icons/settings.png");
 
-        Image img1 = trngle.getImage() ;
-        Image newimg1 = img1.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH ) ;
-        trngle = new ImageIcon( newimg1 );
+        Image img1 = trngle.getImage();
+        Image newimg1 = img1.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+        trngle = new ImageIcon(newimg1);
 
         settings = new JLabel(trngle);
         settings.setBounds(970, 25, 20, 20);
@@ -26,9 +29,9 @@ public class FileLoader extends MainFrame {
 
         trngle = new ImageIcon("/home/iamutkarsh/workspace/Minor/src/icons/branch.png");
 
-        img1 = trngle.getImage() ;
-        newimg1 = img1.getScaledInstance(20, 30, java.awt.Image.SCALE_SMOOTH ) ;
-        trngle = new ImageIcon( newimg1 );
+        img1 = trngle.getImage();
+        newimg1 = img1.getScaledInstance(20, 30, java.awt.Image.SCALE_SMOOTH);
+        trngle = new ImageIcon(newimg1);
 
         branch = new JLabel(trngle);
         branch.setBounds(10, 20, 20, 30);
@@ -37,9 +40,9 @@ public class FileLoader extends MainFrame {
         // Sunc Icon
 
         trngle = new ImageIcon("/home/iamutkarsh/workspace/Minor/src/icons/sync.png");
-        img1 = trngle.getImage() ;
-        newimg1 = img1.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH ) ;
-        trngle = new ImageIcon( newimg1 );
+        img1 = trngle.getImage();
+        newimg1 = img1.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+        trngle = new ImageIcon(newimg1);
 
         sync = new JLabel(trngle);
         sync.setBounds(880, 25, 20, 20);
@@ -53,14 +56,13 @@ public class FileLoader extends MainFrame {
         // Merge Icon
 
         trngle = new ImageIcon("/home/iamutkarsh/workspace/Minor/src/icons/merge.png");
-        img1 = trngle.getImage() ;
-        newimg1 = img1.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH ) ;
-        trngle = new ImageIcon( newimg1 );
+        img1 = trngle.getImage();
+        newimg1 = img1.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+        trngle = new ImageIcon(newimg1);
 
         merge = new JLabel(trngle);
         merge.setBounds(830, 25, 20, 20);
         merge.setVisible(true);
-
 
 
         top_toolbar.add(settings);
@@ -68,11 +70,28 @@ public class FileLoader extends MainFrame {
         top_toolbar.add(sync);
         top_toolbar.add(sync_label);
         top_toolbar.add(merge);
+    }
+
+
+    public static void file_chooser() {
+
+        chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("."));
+        //chooser.setDialogTitle("choosertitle");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        //chooser.setAcceptAllFileFilterUsed(false);
 
 
 
 
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            //System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+            //File pathname= chooser.getCurrentDirectory();
 
+            add_location2.setText(chooser.getCurrentDirectory().getAbsolutePath());
+            // System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
+        }
+        //new File(chooser.getCurrentDirectory()).mkdir();
 
 
     }
