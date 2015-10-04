@@ -1,5 +1,4 @@
 
-
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
@@ -7,28 +6,28 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.*;
 import java.awt.*;
-
-
+import java.io.File;
 
 
 // Main container
 
 public class MainFrame implements ActionListener{
-	
-	
-	JFrame main_container;	
-	JButton plus, add, create, clone, clone_repo, create_repo, add_file, browse;
-	JInternalFrame plus_frame, repository_list_frame, file_list_frame, top_toolbar, text_area_frame;
-	JTextField add_location, create_location, filter_repository;
-	JLabel path, name, triangle, create_repository_image;
-	Graphics g;
-    JTextArea text_area;
 
 
-	int plus_counter=1;
-	
-	int plus_button_width=85;
-	int plus_button_height=30;
+
+	public JFrame main_container;
+    public JButton plus, add, create, clone, clone_repo, create_repo, add_file, browse;
+    public static JInternalFrame plus_frame, repository_list_frame, file_list_frame, top_toolbar, text_area_frame;
+    public JTextField add_location, create_location, filter_repository;
+    public JLabel path, name, triangle, create_repository_image;
+    public Graphics g;
+    public JTextArea text_area;
+
+
+    public int plus_counter=1;
+
+    public int plus_button_width=85;
+    public int plus_button_height=30;
 
 	
 	
@@ -46,17 +45,9 @@ public class MainFrame implements ActionListener{
         //plus_frame.setEnabled(false);
 
 
-        plus_frame.addMouseListener(new MouseAdapter() {
 
-            //public void mouseClicked(MouseEvent e) {
-               // filter_repository.setText("");
-            //}
 
-            public void mouseExited(MouseEvent e) {
-                plus_frame.setVisible(false);
-				plus_counter++;
-            }
-        });
+
 
 
 
@@ -96,7 +87,7 @@ public class MainFrame implements ActionListener{
         text_area = new JTextArea(666,675);
         text_area.setBounds(702,75,666,675);
         //text_area.setLayout(null);
-        text_area.setVisible(true);
+        text_area.setVisible(false);
         text_area.setBackground(Color.white);
         //text_area.setEnabled(true);
         text_area.setEditable(true);
@@ -122,6 +113,42 @@ public class MainFrame implements ActionListener{
         bi.setNorthPane(null);
 
 
+		// Plus frame vanish
+
+		top_toolbar.addMouseListener(new MouseAdapter() {
+
+
+
+			public void mouseEntered(MouseEvent e) {
+				plus_frame.setVisible(false);
+				plus_counter++;
+
+			}
+		});
+
+
+		file_list_frame.addMouseListener(new MouseAdapter() {
+
+
+
+			public void mouseEntered(MouseEvent e) {
+				plus_frame.setVisible(false);
+				plus_counter++;
+
+			}
+		});
+
+
+		repository_list_frame.addMouseListener(new MouseAdapter() {
+
+			public void mouseEntered(MouseEvent e) {
+				plus_frame.setVisible(false);
+				plus_counter++;
+
+			}
+		});
+
+
 
 
         // Image Display
@@ -138,21 +165,23 @@ public class MainFrame implements ActionListener{
         triangle.setVisible(true);
 
 
-        /*
+
         // Create repo Image
 
-        ImageIcon trngle = new ImageIcon("/home/iamutkarsh/workspace/Minor/src/icons/create_repository.png");
+        trngle = new ImageIcon("/home/iamutkarsh/workspace/Minor/src/icons/create_repository.png");
 
-        Image img1 = trngle.getImage() ;
-        Image newimg1 = img1.getScaledInstance(200, 100, java.awt.Image.SCALE_SMOOTH ) ;
-        ImageIcon image = new ImageIcon( newimg1 );
+        img1 = trngle.getImage() ;
+        newimg1 = img1.getScaledInstance(580, 200, java.awt.Image.SCALE_SMOOTH ) ;
+        trngle = new ImageIcon( newimg1 );
 
-        create_repository_image = new JLabel(image);
-        create_repository_image.setBounds(702, 300, 200, 100);
+        create_repository_image = new JLabel(trngle);
+        create_repository_image.setBounds(702, 300, 580, 200);
         create_repository_image.setVisible(true);
 
-        */
 
+        // Function call
+        //FileLoader a = new FileLoader();
+		FileLoader.image_load();
 
 
 
@@ -348,6 +377,7 @@ public class MainFrame implements ActionListener{
 		// On plus button click 
 
         text_area_frame.add(text_area);
+        text_area_frame.add(create_repository_image);
 	    repository_list_frame.add(filter_repository);
 
 		main_container.add(plus);
