@@ -6,7 +6,7 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.*;
 import java.awt.*;
-import java.io.File;
+import java.io.*;
 
 
 // Main container
@@ -23,11 +23,15 @@ public class MainFrame implements ActionListener{
     public Graphics g;
     public JTextArea text_area;
 
+    public static JPanel repository_list_panel;
+    public static JScrollPane repository_list_scrollpane;
 
-    public int plus_counter=2;
+
+    public int plus_counter=1;
 
     public int plus_button_width=85;
     public int plus_button_height=30;
+    public int repo_counter=0;
 
 	
 	
@@ -45,19 +49,48 @@ public class MainFrame implements ActionListener{
 
 
         repository_list_frame = new JInternalFrame();
-        repository_list_frame.setBounds(0, 75, 300, 675);
+        repository_list_frame.setBounds(0, 112, 300, 675);
         repository_list_frame.setLayout(null);
         repository_list_frame.setVisible(true);
         repository_list_frame.setBackground(Color.white);
-        repository_list_frame.setEnabled(false);
+
+
+        repository_list_panel = new JPanel();
+        repository_list_panel.setBounds(0, 0, 300, 2000);
+        repository_list_panel.setLayout(null);
+        repository_list_panel.setVisible(true);
+        repository_list_panel.setBackground(Color.white);
+
+
+
+
+        repository_list_scrollpane = new JScrollPane(repository_list_panel);
+        repository_list_scrollpane.setBounds(0, 0, 300, 675);
+        //repository_list_scrollpane.setLayout(null);
+        //repository_list_scrollpane.setVisible(true);
+        //repository_list_scrollpane.setBackground(Color.white);
+        //repository_list_scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+
+
+        //repository_list_scrollpane.getVerticalScrollBar().setPreferredSize(new Dimension(0, ));
+
+        //repository_list_scrollpane.setViewportBorder(new LineBorder(Color.RED));
+
+        //repository_list_frame.removeAll();
+        //repository_list_frame.repaint();
+
+        //repository_list_frame.setAutoscrolls(true);
+
+        //repository_list_frame.setEnabled(true);
 
 
         file_list_frame = new JInternalFrame();
-        file_list_frame.setBounds(301, 75, 400, 675);
+        file_list_frame.setBounds(301, 112, 400, 675);
         file_list_frame.setLayout(null);
         file_list_frame.setVisible(true);
         file_list_frame.setBackground(Color.white);
-        file_list_frame.setEnabled(false);
+        //file_list_frame.setEnabled(false);
 
 
         top_toolbar = new JInternalFrame();
@@ -65,7 +98,7 @@ public class MainFrame implements ActionListener{
         top_toolbar.setLayout(null);
         top_toolbar.setVisible(true);
         top_toolbar.setBackground(Color.white);
-        top_toolbar.setEnabled(false);
+        //top_toolbar.setEnabled(false);
 
         text_area_frame = new JInternalFrame();
         text_area_frame.setBounds(702, 75, 666, 675);
@@ -114,7 +147,7 @@ public class MainFrame implements ActionListener{
                 if (plus_on == false) {
 
                     plus_frame.setVisible(false);
-                    plus_counter++;
+                    //plus_counter++;
 
                 }
 
@@ -131,7 +164,7 @@ public class MainFrame implements ActionListener{
                 if (plus_on == false) {
 
                     plus_frame.setVisible(false);
-                    plus_counter++;
+                    //plus_counter++;
                 }
 
             }
@@ -145,7 +178,9 @@ public class MainFrame implements ActionListener{
                 if (plus_on == false) {
 
                     plus_frame.setVisible(false);
-                    plus_counter++;
+                    repository_list_frame.setVisible(true);
+                    //repository_list_frame.setEnabled(true);
+                    //plus_counter++;
                 }
 
             }
@@ -167,6 +202,9 @@ public class MainFrame implements ActionListener{
 
         // **************************************************************************
 
+
+
+        
 
 
 
@@ -289,6 +327,120 @@ public class MainFrame implements ActionListener{
 		create_repo = new JButton(icon);
 		create_repo.setBounds(220,230,60,50);
 		create_repo.setVisible(false);
+        
+        
+        // create Button Listener
+
+        create_repo.addMouseListener(new MouseAdapter() {
+
+            public void mousePressed(MouseEvent e) {
+
+                boolean mkdir = new File(FileLoader.chooser.getSelectedFile().getAbsolutePath()+"/"+create_location.getText()+"_git").mkdir();
+
+                // Adding created directory to arraylist
+                FileLoader.repo_path_list.add(FileLoader.chooser.getSelectedFile().getAbsolutePath() + "/" + create_location.getText() + "_git");
+
+
+
+                // Setting current working directory
+                FileLoader.current_working_path = FileLoader.chooser.getSelectedFile().getAbsolutePath();
+
+                // Duplicacy check
+
+                int flag = 0;
+
+
+                try {
+                    File file = new File("repository_list.dat");
+                    FileReader fileReader = new FileReader(file);
+                    BufferedReader bufferedReader = new BufferedReader(fileReader);
+                    StringBuffer stringBuffer = new StringBuffer();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+
+
+                        if(line.compareToIgnoreCase(FileLoader.chooser.getSelectedFile().getAbsolutePath() + "/" + create_location.getText() + "_git") == 0) {
+
+                            JOptionPane.showMessageDialog(null, "Repository already Exists!", "Redundancy", JOptionPane.INFORMATION_MESSAGE);
+                            flag = 1;
+                            break;
+
+                        }
+
+
+                    }
+                    fileReader.close();
+                }
+
+                catch (IOException et) {
+                    et.printStackTrace();
+                }
+
+
+
+                if( flag == 0 ) {
+
+
+                    // Creating a new button
+
+                    ButtonClass but = new ButtonClass((FileLoader.current_working_path + "/" + create_location.getText() + "_git"), repo_counter++);
+
+
+                    repository_list_frame.add(but.button);
+                    repository_list_frame.repaint();
+
+                    //repository_list_scrollpane.getViewport().add(but.button, null);
+                    //repository_list_scrollpane.repaint();
+
+
+                    // Inserting repository paths in the .dat file
+
+
+                    try {
+                        File file = new File("repository_list.dat");
+
+                        if (!file.exists()) {
+                            file.createNewFile();
+                        }
+
+                        FileWriter fw = new FileWriter(file, true);
+                        BufferedWriter bw = new BufferedWriter(fw);
+                        PrintWriter out = new PrintWriter(bw);
+
+                        //This will add a new line to the file content
+                        out.println(FileLoader.current_working_path + "/" + create_location.getText() + "_git");
+                        //repo_counter++;
+
+                        out.close();
+
+
+                    }
+
+                    catch (IOException ioe) {
+                        System.out.println("Exception occurred:");
+                        ioe.printStackTrace();
+                    }
+
+
+                    JOptionPane.showMessageDialog(null, "Repository created!", "Alert", JOptionPane.INFORMATION_MESSAGE);
+
+                    create_location.setText("");
+                    add_location2.setText("");
+
+                    //repository_list_frame.repaint();
+
+
+                }
+
+
+
+
+
+            }
+        });
+        
+        
+        
 		
 		
 		
@@ -364,15 +516,17 @@ public class MainFrame implements ActionListener{
         filter_repository = new JTextField("Filter Repository");
 
 
-        filter_repository.setBounds(0, 0, 290, 36);
+        filter_repository.setBounds(0, 75, 300, 36);
         filter_repository.setVisible(true);
-        //filter_repository.setAlwaysOnTop(true);
-        //filter_repository.
+
+
+
         // filter label vanish
         filter_repository.addMouseListener(new MouseAdapter() {
 
             public void mouseClicked(MouseEvent e) {
                 filter_repository.setText("");
+                plus_frame.setVisible(false);
             }
 
             public void mouseExited(MouseEvent e) {
@@ -427,18 +581,66 @@ public class MainFrame implements ActionListener{
 
         text_area_frame.add(text_area);
         text_area_frame.add(create_repository_image);
-	    repository_list_frame.add(filter_repository);
 
-		main_container.add(plus);
+
+        // Filter Repository frame updation
+	    //repository_list_frame.add(filter_repository);
+
+
+
+        // Reading repository path from the .dat file
+
+
+
+        try {
+            File file = new File("repository_list.dat");
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            StringBuffer stringBuffer = new StringBuffer();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+
+
+                ButtonClass but = new ButtonClass(line, repo_counter++);
+                repository_list_frame.add(but.button);
+
+                repository_list_frame.repaint();
+                //repository_list_panel.revalidate();
+                //repository_list_scrollpane.repaint();
+
+
+            }
+            fileReader.close();
+        }
+
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+
+
 
 		main_container.add(plus_frame);
         //main_container.add(filter_repository);
+        //repository_list_scrollpane.add(repository_list_panel);
+        //repository_list_frame.add(repository_list_scrollpane);
+
+        //repository_list_frame.getContentPane().add(repository_list_scrollpane, BorderLayout.CENTER);
+
+
         main_container.add(repository_list_frame);
         main_container.add(file_list_frame);
         main_container.add(top_toolbar);
         main_container.add(triangle);
         main_container.add(text_area_frame);
-
+        main_container.add(plus);
+        main_container.add(filter_repository);
 
         main_container.setVisible(true);
 
@@ -462,18 +664,13 @@ public class MainFrame implements ActionListener{
 
 
             // Hide/Unhide
-            if (plus_counter % 2 == 0) {
+            //if (plus_counter % 2 == 0) {
 
-                plus_frame.setVisible(true);
-                add.setVisible(true);
-                create.setVisible(true);
-                clone.setVisible(true);
-            } else {
-                plus_frame.setVisible(false);
-                add.setVisible(false);
-                create.setVisible(false);
-                clone.setVisible(false);
-            }
+            plus_frame.setVisible(true);
+            add.setVisible(true);
+            create.setVisible(true);
+            clone.setVisible(true);
+
 
             path.setVisible(true);
             browse.setVisible(true);

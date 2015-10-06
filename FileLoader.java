@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by iamutkarsh on 4/10/15.
@@ -11,6 +12,11 @@ public class FileLoader extends MainFrame implements ActionListener {
 
     public static JLabel settings, branch, sync, sync_label, merge;
     public static JFileChooser chooser;
+    public static String current_working_path;
+    public static ArrayList<JButton> repo_list = new ArrayList<JButton>();
+    public static ArrayList<String> repo_path_list = new ArrayList<String>();
+
+
 
     public static void image_load() {
 
@@ -88,7 +94,7 @@ public class FileLoader extends MainFrame implements ActionListener {
             //System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
             //File pathname= chooser.getCurrentDirectory();
 
-            add_location2.setText(chooser.getCurrentDirectory().getAbsolutePath());
+            add_location2.setText(chooser.getSelectedFile().getAbsolutePath());
             // System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
         }
         //new File(chooser.getCurrentDirectory()).mkdir();
